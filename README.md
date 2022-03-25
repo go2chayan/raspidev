@@ -30,6 +30,6 @@ python setup.py install
 
 To install the Freenove 4WD car kit sdk, run the following
 ```bash
-build-freenove-4wd.sh
+build.sh
 ```
 

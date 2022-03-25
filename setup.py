@@ -75,6 +75,10 @@ setuptools.setup(
 
     install_requires=[
         "pyserial",
+        "PyQt5",
+        "Pillow",
+        "opencv-python-headless",
+        "numpy"
     ],
 
     cmdclass={
