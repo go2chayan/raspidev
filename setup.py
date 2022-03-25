@@ -77,7 +77,7 @@ setuptools.setup(
         "pyserial",
         "PyQt5",
         "Pillow",
-        "opencv-python-headless",
+        # "opencv-python-headless",
         "numpy"
     ],
 
