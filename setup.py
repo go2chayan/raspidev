@@ -65,7 +65,7 @@ setuptools.setup(
     developer features for raspberry pi. It supports basic python develop
     environment (conda etc.) in raspberry pi.
     """,
-    long_description=open("README", "r", encoding='utf-8').read(),
+    long_description=open("README.md", "r", encoding='utf-8').read(),
     long_description_content_type="text/markdown",
 
     packages=setuptools.find_packages(),
