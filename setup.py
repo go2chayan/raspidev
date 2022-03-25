@@ -13,8 +13,7 @@ class build(_build):
 CUSTOM_COMMANDS = [
 ['sudo', 'apt-get', 'update'],
 ['sudo', 'apt-get', 'upgrade', '-y' ],
-['sudo', 'apt-get', 'install', 'rpi.gpio', '-y'],
-['python', '-m', 'venv', '~/env']
+['sudo', 'apt-get', 'install', 'rpi.gpio', '-y']
 ]
 
 
