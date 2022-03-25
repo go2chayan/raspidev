@@ -13,7 +13,9 @@ class build(_build):
 CUSTOM_COMMANDS = [
 ['sudo', 'apt-get', 'update'],
 ['sudo', 'apt-get', 'upgrade', '-y' ],
-['sudo', 'apt-get', 'install', 'rpi.gpio', '-y']
+['sudo', 'apt-get', 'install', 'rpi.gpio', '-y'],
+['pip', 'install', 'numpy'],
+['pip', 'install', 'opencv-python-headless'],
 ]
 
 
@@ -76,9 +78,7 @@ setuptools.setup(
     install_requires=[
         "pyserial",
         "PyQt5",
-        "Pillow",
-        # "opencv-python-headless",
-        "numpy"
+        "Pillow"
     ],
 
     cmdclass={
