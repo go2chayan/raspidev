@@ -24,7 +24,7 @@ python setup.py install
 
 ## Setting up Freenove 4WD Smart Car
 
-1. Enable I2C from Raspberry Pi Configuration
+1. Enable Camera, SSH, VNC, SPI, I2C, Serial Port, and Serial Console from Raspberry Pi Configuration. `lsmod | grep i2c` should produce two outputs.
 2. Try `i2cdetect -y 1`. The smart car board has two chips, PCF8591 and PCA9685. Their I2C addresses are 0X48 and 0X40 respectively.
 3. Run the build:
 ```bash

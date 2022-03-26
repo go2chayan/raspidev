@@ -80,6 +80,7 @@ setuptools.setup(
 
     install_requires=[
         "pyserial",
+        "rpi.gpio",
     ],
 
     cmdclass={
