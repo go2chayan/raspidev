@@ -16,6 +16,7 @@ CUSTOM_COMMANDS = [
 ['sudo', 'apt-get', 'install', 'rpi.gpio', '-y'],
 ['pip', 'install', 'numpy'],
 ['pip', 'install', 'opencv-python-headless'],
+['pip', 'install', 'smbus'],
 ]
 
 
