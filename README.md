@@ -26,9 +26,28 @@ python setup.py install
 
 1. Enable I2C from Raspberry Pi Configuration
 2. Try `i2cdetect -y 1`. The smart car board has two chips, PCF8591 and PCA9685. Their I2C addresses are 0X48 and 0X40 respectively.
-
-To install the Freenove 4WD car kit sdk, run the following
+3. Run the build:
 ```bash
-build.sh
+source build.sh
 ```
+4. Edit the `/boot/config.txt` file:
+```bash
+sudo nano /boot/config.txt
+```
+5. Add # before camera_auto_detect=1 -> # camera_auto_detect=1
+6. Add f in dtoverlay=vc4-kms-v3d    -> dtoverlay=vc4-fkms-v3d
+7. Add following in the end. 
+```
+start_x=1
+gpu_mem=128
+```
+8. Add following in the end
+```
+hdmi_force_hotplug=1 
+hdmi_ignore_edid=0xa5000080 
+hdmi_group=2
+hdmi_mode=82
+```
+9. Finally press `Ctrl+O`, `Enter`, then `Ctrl+X`
+
 
