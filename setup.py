@@ -80,6 +80,8 @@ setuptools.setup(
 
     install_requires=[
         "pyserial",
+        "rpi.gpio",
+        "picamera",
     ],
 
     cmdclass={
