@@ -14,6 +14,7 @@ CUSTOM_COMMANDS = [
 ['sudo', 'apt-get', 'update'],
 ['sudo', 'apt-get', 'upgrade', '-y' ],
 ['sudo', 'apt-get', 'install', 'rpi.gpio', '-y'],
+['sudo', 'apt-get', 'install', 'python3-pyqt5', '-y'],
 ['pip', 'install', 'numpy'],
 ['pip', 'install', 'opencv-python-headless'],
 ['pip', 'install', 'smbus'],
@@ -78,7 +79,6 @@ setuptools.setup(
 
     install_requires=[
         "pyserial",
-        "PyQt5",
         "Pillow"
     ],
 
