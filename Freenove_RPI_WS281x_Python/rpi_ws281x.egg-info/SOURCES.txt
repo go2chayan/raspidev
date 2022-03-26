@@ -3,6 +3,7 @@ LICENSE
 MANIFEST.in
 README.rst
 rpi_ws281x_wrap.c
+setup.cfg
 setup.py
 version.h
 lib/LICENSE

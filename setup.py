@@ -17,6 +17,7 @@ CUSTOM_COMMANDS = [
 ['sudo', 'apt-get', 'install', 'python3-pyqt5', '-y'],
 ['pip', 'install', 'numpy'],
 ['pip', 'install', 'opencv-python-headless'],
+['pip', 'install', 'Pillow'],
 ['pip', 'install', 'smbus'],
 ]
 
@@ -79,7 +80,6 @@ setuptools.setup(
 
     install_requires=[
         "pyserial",
-        "Pillow"
     ],
 
     cmdclass={

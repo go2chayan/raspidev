@@ -177,12 +177,13 @@ Description: rpi\_ws281x
         
         When controlling a LED string of 240 LEDs the CPU load on the original
         Pi 2 (BCM2836) are: PWM 5% PCM 5% SPI 1%
+        
         4.2.6
-		-----
-
-		* New: Added support for Revision 0xD03114 (Pi 4, 8GB v1.4)
-		* New: Added support for Revision 0xc03114 (Pi 4, 4GB v1.4)
-
+        -----
+        
+        * New: Added support for Revision 0xD03114 (Pi 4, 8GB v1.4)
+        * New: Added support for Revision 0xc03114 (Pi 4, 4GB v1.4)
+        
         4.2.5
         -----
         
