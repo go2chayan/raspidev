@@ -82,6 +82,7 @@ setuptools.setup(
         "pyserial",
         "rpi.gpio",
         "picamera",
+        "xbox360controller",
     ],
 
     cmdclass={
