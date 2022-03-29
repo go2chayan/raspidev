@@ -79,6 +79,7 @@ setuptools.setup(
     python_requires='>=3.7',
 
     install_requires=[
+        "pyqt5",
         "pyserial",
         "rpi.gpio",
         "picamera",

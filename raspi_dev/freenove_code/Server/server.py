@@ -22,6 +22,7 @@ from threading import Thread
 from Command import COMMAND as cmd
 
 class Server:   
+    
     def __init__(self):
         self.PWM=Motor()
         self.servo=Servo()
@@ -37,6 +38,7 @@ class Server:
         self.Mode = 'one'
         self.endChar='\n'
         self.intervalChar='#'
+    
     def get_interface_ip(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         return socket.inet_ntoa(fcntl.ioctl(s.fileno(),
@@ -70,8 +72,10 @@ class Server:
         self.ReadData=Thread(target=self.readdata)
         self.SendVideo.start()
         self.ReadData.start()
+    
     def send(self,data):
         self.connection1.send(data.encode('utf-8'))    
+    
     def sendvideo(self):
         try:
             self.connection,self.client_address = self.server_socket.accept()
@@ -261,6 +265,7 @@ class Server:
         except Exception as e: 
             print(e)
         self.StopTcpServer()    
+    
     def sendUltrasonic(self):
         if self.sonic==True:
             ADC_Ultrasonic=self.ultrasonic.get_distance()
@@ -271,6 +276,7 @@ class Server:
                     self.sonic=False
             self.ultrasonicTimer = threading.Timer(0.13,self.sendUltrasonic)
             self.ultrasonicTimer.start()
+    
     def sendLight(self):
         if self.Light==True:
             ADC_Light1=self.adc.recvADC(0)
@@ -281,6 +287,7 @@ class Server:
                 self.Light=False
             self.lightTimer = threading.Timer(0.17,self.sendLight)
             self.lightTimer.start()
+    
     def Power(self):
         while True:
             ADC_Power=self.adc.recvADC(2)*3
@@ -299,5 +306,8 @@ class Server:
                     time.sleep(0.1)
             else:
                 self.buzzer.run('0')
+
 if __name__=='__main__':
-    pass
+    serv = Server()
+    serv.Reset()
+    
