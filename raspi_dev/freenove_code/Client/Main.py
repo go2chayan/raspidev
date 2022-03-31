@@ -19,7 +19,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import * 
+import signal
+import xbox360controller
+
+
 class mywindow(QMainWindow,Ui_Client):
+
     def __init__(self):
         global timer
         super(mywindow,self).__init__()
@@ -147,6 +152,30 @@ class mywindow(QMainWindow,Ui_Client):
         self.Window_Close.clicked.connect(self.close)
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.time)
+        
+        self.controller = xbox360controller.Xbox360Controller(
+            0, axis_threshold=0.2)
+        for button in self.controller.buttons:
+            button.when_pressed = self.on_ctrl_button_pressed
+        for axis in self.controller.axes:
+            if type(axis) is not xbox360controller.controller.RawAxis:
+                axis.when_moved = self.on_ctrl_axis_moved
+
+    def on_ctrl_button_pressed(self, button):
+        print('Button {0} was pressed'.format(button.name))
+
+    def on_ctrl_axis_moved(self, axis):
+        if axis.name == "axis_l":
+            # Car movement
+            if axis.x > 0:
+                # TODO: Finish
+                ForWard=self.intervalChar+str(1500)+self.intervalChar+str(1500)+self.intervalChar+str(1500)+self.intervalChar+str(1500)+self.endChar
+        self.TCP.sendData(cmd.CMD_MOTOR+ForWard)
+                
+        
+        print('Axis {0} moved to {1} {2}'.format(axis.name, axis.x, axis.y))
+
+    
     def mousePressEvent(self, event):
         if event.button()==Qt.LeftButton:
             self.m_drag=True
@@ -172,7 +201,6 @@ class mywindow(QMainWindow,Ui_Client):
             self.on_btn_Right()
         elif(event.key() == Qt.Key_Home):
             self.on_btn_Home()
-
 
         if(event.key() == Qt.Key_Q):
             if self.Btn_Mode1.isChecked() == True:
@@ -209,7 +237,6 @@ class mywindow(QMainWindow,Ui_Client):
         if(event.key() == Qt.Key_V):
             self.on_btn_video()
 
-            
         if(event.key() == Qt.Key_1):
             if self.checkBox_Led1.isChecked() == True:
                 self.checkBox_Led1.setChecked(False)
@@ -250,7 +277,6 @@ class mywindow(QMainWindow,Ui_Client):
                 self.checkBox_Led8.setChecked(False)
             else:
                 self.checkBox_Led8.setChecked(True)
-
                 
         if event.isAutoRepeat():
             pass
@@ -297,8 +323,6 @@ class mywindow(QMainWindow,Ui_Client):
                 self.on_btn_Buzzer()
                 self.Key_Space=False
         
-
-        
     def on_btn_ForWard(self):
         ForWard=self.intervalChar+str(1500)+self.intervalChar+str(1500)+self.intervalChar+str(1500)+self.intervalChar+str(1500)+self.endChar
         self.TCP.sendData(cmd.CMD_MOTOR+ForWard)
@@ -326,6 +350,7 @@ class mywindow(QMainWindow,Ui_Client):
         elif self.Btn_Video.text()=='Close Video':
             self.timer.stop()
             self.Btn_Video.setText('Open Video')
+            
     def on_btn_Up(self):
         self.servo2=self.servo2+10
         if self.servo2>=180:
@@ -337,21 +362,25 @@ class mywindow(QMainWindow,Ui_Client):
         if self.servo1<=0:
             self.servo1=0
         self.HSlider_Servo1.setValue(self.servo1)
+    
     def on_btn_Down(self):
         self.servo2=self.servo2-10
         if self.servo2<=80:
             self.servo2=80
         self.VSlider_Servo2.setValue(self.servo2)
+    
     def on_btn_Right(self):
         self.servo1=self.servo1+10
         if self.servo1>=180:
             self.servo1=180
         self.HSlider_Servo1.setValue(self.servo1)
+    
     def on_btn_Home(self):
         self.servo1=90
         self.servo2=90
         self.HSlider_Servo1.setValue(self.servo1)
         self.VSlider_Servo2.setValue(self.servo2)
+    
     def on_btn_Buzzer(self):
         if self.Btn_Buzzer.text()=='Buzzer':
             self.TCP.sendData(cmd.CMD_BUZZER+self.intervalChar+'1'+self.endChar)
@@ -359,6 +388,7 @@ class mywindow(QMainWindow,Ui_Client):
         else:
             self.TCP.sendData(cmd.CMD_BUZZER+self.intervalChar+'0'+self.endChar)
             self.Btn_Buzzer.setText('Buzzer')
+    
     def on_btn_Ultrasonic(self):
         if self.Ultrasonic.text()=="Ultrasonic":
             self.TCP.sendData(cmd.CMD_SONIC+self.intervalChar+'1'+self.endChar)
@@ -372,12 +402,12 @@ class mywindow(QMainWindow,Ui_Client):
         else:
             self.TCP.sendData(cmd.CMD_LIGHT+self.intervalChar+'0'+self.endChar)
             self.Light.setText("Light")
-
         
     def Change_Left_Right(self):#Left or Right
         self.servo1=self.HSlider_Servo1.value()
         self.TCP.sendData(cmd.CMD_SERVO+self.intervalChar+'0'+self.intervalChar+str(self.servo1)+self.endChar)
         self.label_Servo1.setText("%d"%self.servo1)
+    
     def Change_Up_Down(self):#Up or Down
         self.servo2=self.VSlider_Servo2.value()
         self.TCP.sendData(cmd.CMD_SERVO+self.intervalChar+'1'+self.intervalChar+str(self.servo2)+self.endChar)
@@ -483,7 +513,6 @@ class mywindow(QMainWindow,Ui_Client):
                self.TCP.sendData(cmd.CMD_LED_MOD+self.intervalChar+'4'+self.endChar)
            else:
                self.TCP.sendData(cmd.CMD_LED_MOD+self.intervalChar+'0'+self.endChar)
-
  
     def on_btn_Mode(self,Mode):
         if Mode.text() == "M-Free":
@@ -502,8 +531,7 @@ class mywindow(QMainWindow,Ui_Client):
             if Mode.isChecked() == True:
                 #self.timer.stop()
                 self.TCP.sendData(cmd.CMD_MODE+self.intervalChar+'four'+self.endChar)
-         
-                                  
+                                           
     def on_btn_Connect(self):
         if self.Btn_Connect.text() == "Connect":
             self.h=self.IP.text()
@@ -553,6 +581,7 @@ class mywindow(QMainWindow,Ui_Client):
                 time.sleep(60)
             except:
                 break
+            
     def recvmassage(self):
             self.TCP.socket1_connect(self.h)
             self.power=Thread(target=self.Power)
@@ -578,6 +607,7 @@ class mywindow(QMainWindow,Ui_Client):
                     elif cmd. CMD_POWER in Massage:
                         percent_power=int((float(Massage[1])-7)/1.40*100)
                         self.progress_Power.setValue(percent_power) 
+    
     def is_valid_jpg(self,jpg_file):
         try:
             bValid = True
@@ -605,6 +635,7 @@ class mywindow(QMainWindow,Ui_Client):
             self.Btn_Tracking_Faces.setText("Tracing-Off")
         else:
             self.Btn_Tracking_Faces.setText("Tracing-On")
+    
     def find_Face(self,face_x,face_y):
         if face_x!=0 and face_y!=0:
             offset_x=float(face_x/400-0.5)*2
@@ -618,6 +649,7 @@ class mywindow(QMainWindow,Ui_Client):
             else:
                 self.HSlider_Servo1.setValue(self.servo1)
                 self.VSlider_Servo2.setValue(self.servo2)
+    
     def time(self):
         self.TCP.video_Flag=False
         try:
@@ -633,7 +665,7 @@ class mywindow(QMainWindow,Ui_Client):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     myshow=mywindow()
-    myshow.show();   
+    myshow.show()
     sys.exit(app.exec_())
     
 
