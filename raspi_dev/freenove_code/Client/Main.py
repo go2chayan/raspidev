@@ -152,30 +152,40 @@ class mywindow(QMainWindow,Ui_Client):
         self.Window_Close.clicked.connect(self.close)
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.time)
-        
-        self.controller = xbox360controller.Xbox360Controller(
-            0, axis_threshold=0.2)
-        for button in self.controller.buttons:
-            button.when_pressed = self.on_ctrl_button_pressed
-        for axis in self.controller.axes:
-            if type(axis) is not xbox360controller.controller.RawAxis:
-                axis.when_moved = self.on_ctrl_axis_moved
-
-    def on_ctrl_button_pressed(self, button):
-        print('Button {0} was pressed'.format(button.name))
-
-    def on_ctrl_axis_moved(self, axis):
-        if axis.name == "axis_l":
-            # Car movement
-            if axis.x > 0:
-                # TODO: Finish
-                ForWard=self.intervalChar+str(1500)+self.intervalChar+str(1500)+self.intervalChar+str(1500)+self.intervalChar+str(1500)+self.endChar
-        self.TCP.sendData(cmd.CMD_MOTOR+ForWard)
-                
-        
-        print('Axis {0} moved to {1} {2}'.format(axis.name, axis.x, axis.y))
-
     
+        def on_head_moved(axis):
+            print(axis.x)
+
+        def on_car_moved(axis):
+            front_left = 0
+            rear_left = 0
+            front_right = 0
+            rear_right = 0
+            
+            if abs(axis.y) > 0.75:
+                front_left = front_left - 1500*axis.y
+                rear_left = rear_left - 1500*axis.y
+                front_right = front_right - 1500*axis.y
+                rear_right = rear_right - 1500*axis.y
+            
+            if abs(axis.x) > 0.75:
+                front_left = rear_left = 1500*axis.x
+                front_right = rear_right = -1500*axis.x
+
+            move_command = self.intervalChar + str(int(front_left)) + \
+                            self.intervalChar + str(int(rear_left)) + \
+                            self.intervalChar + str(int(front_right)) + \
+                            self.intervalChar + str(int(rear_right)) + \
+                            self.endChar
+            
+            self.TCP.sendData(cmd.CMD_MOTOR+move_command)
+            
+            print('Axis {0} moved to {1} {2}'.format(axis.name, axis.x, axis.y))
+            
+        self.controller = xbox360controller.Xbox360Controller(0, axis_threshold=0.25)
+        self.controller.axis_l.when_moved = on_car_moved
+        self.controller.axis_r.when_moved = on_head_moved
+
     def mousePressEvent(self, event):
         if event.button()==Qt.LeftButton:
             self.m_drag=True
